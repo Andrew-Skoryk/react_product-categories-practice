@@ -2,8 +2,17 @@ import { FC, useState } from 'react';
 import cn from 'classnames';
 import usersFromServer from '../../api/users';
 
-export const ProductsFilter: FC = () => {
-  const [selectedUser] = useState(0);
+type Props = {
+  handleUserFilter: (userId: number) => void;
+};
+
+export const ProductsFilter: FC<Props> = ({ handleUserFilter }) => {
+  const [selectedUser, setSelectedUser] = useState(0);
+
+  const handleSelection = (id: number) => {
+    setSelectedUser(id);
+    handleUserFilter(id);
+  };
 
   return (
     <div className="block">
@@ -14,6 +23,10 @@ export const ProductsFilter: FC = () => {
           <a
             data-cy="FilterAllUsers"
             href="#/"
+            onClick={() => handleSelection(0)}
+            className={cn({
+              'is-active': selectedUser === 0,
+            })}
           >
             All
           </a>
@@ -26,6 +39,7 @@ export const ProductsFilter: FC = () => {
               className={cn({
                 'is-active': selectedUser === id,
               })}
+              onClick={() => handleSelection(id)}
             >
               {name}
             </a>

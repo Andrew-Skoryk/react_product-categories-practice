@@ -5,16 +5,44 @@ import productsFromServer from './api/products';
 import { Product } from './types/Products';
 import { ProductList } from './components/ProductsList';
 import { ProductsFilter } from './components/ProducsFilter';
+import usersFromServer from './api/users';
+import categoriesFromServer from './api/categories';
+
+const getUserById = (userId: number | undefined) => (
+  usersFromServer.find(({ id }) => id === userId)
+);
+
+const getCategoryById = (categoryId: number) => (
+  categoriesFromServer.find(({ id }) => id === categoryId)
+);
 
 export const App: FC = () => {
-  const [products] = useState<Product[]>(productsFromServer);
+  const [products, setProducts] = useState<Product[]>(productsFromServer);
+
+  const filterByUser = (userId: number) => (
+    productsFromServer.filter(({ categoryId }) => {
+      const category = getCategoryById(categoryId);
+      const user = getUserById(category?.ownerId);
+
+      if (userId === 0 || user === undefined) {
+        return true;
+      }
+
+      return user.id === userId;
+    }));
+
+  const handleUserFilter = (userId: number) => {
+    setProducts(filterByUser(userId));
+  };
 
   return (
     <div className="section">
       <div className="container">
         <h1 className="title">Product Categories</h1>
 
-        <ProductsFilter />
+        <ProductsFilter
+          handleUserFilter={handleUserFilter}
+        />
 
         <div className="box table-container">
           {!products.length ? (
@@ -22,7 +50,9 @@ export const App: FC = () => {
               No products matching selected criteria
             </p>
           ) : (
-            <ProductList products={products} />
+            <ProductList
+              products={products}
+            />
           )}
         </div>
       </div>
