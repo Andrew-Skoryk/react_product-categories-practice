@@ -1,117 +1,114 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
+import cn from 'classnames';
+import usersFromServer from '../../api/users';
 
-export const ProductsFilter: FC = () => (
-  <div className="block">
-    <nav className="panel">
-      <p className="panel-heading">Filters</p>
+export const ProductsFilter: FC = () => {
+  const [selectedUser] = useState(0);
 
-      <p className="panel-tabs has-text-weight-bold">
-        <a
-          data-cy="FilterAllUsers"
-          href="#/"
-        >
-          All
-        </a>
+  return (
+    <div className="block">
+      <nav className="panel">
+        <p className="panel-heading">Filters</p>
 
-        <a
-          data-cy="FilterUser"
-          href="#/"
-        >
-          User 1
-        </a>
+        <p className="panel-tabs has-text-weight-bold">
+          <a
+            data-cy="FilterAllUsers"
+            href="#/"
+          >
+            All
+          </a>
 
-        <a
-          data-cy="FilterUser"
-          href="#/"
-          className="is-active"
-        >
-          User 2
-        </a>
-
-        <a
-          data-cy="FilterUser"
-          href="#/"
-        >
-          User 3
-        </a>
-      </p>
-
-      <div className="panel-block">
-        <p className="control has-icons-left has-icons-right">
-          <input
-            data-cy="SearchField"
-            type="text"
-            className="input"
-            placeholder="Search"
-            value="qwe"
-          />
-
-          <span className="icon is-left">
-            <i className="fas fa-search" aria-hidden="true" />
-          </span>
-
-          <span className="icon is-right">
-            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-            <button
-              data-cy="ClearButton"
-              type="button"
-              className="delete"
-            />
-          </span>
+          {usersFromServer.map(({ id, name }) => (
+            <a
+              data-cy="FilterUser"
+              href="#/"
+              key={id}
+              className={cn({
+                'is-active': selectedUser === id,
+              })}
+            >
+              {name}
+            </a>
+          ))}
         </p>
-      </div>
 
-      <div className="panel-block is-flex-wrap-wrap">
-        <a
-          href="#/"
-          data-cy="AllCategories"
-          className="button is-success mr-6 is-outlined"
-        >
-          All
-        </a>
+        <div className="panel-block">
+          <p className="control has-icons-left has-icons-right">
+            <input
+              data-cy="SearchField"
+              type="text"
+              className="input"
+              placeholder="Search"
+              value="qwe"
+            />
 
-        <a
-          data-cy="Category"
-          className="button mr-2 my-1 is-info"
-          href="#/"
-        >
-          Category 1
-        </a>
+            <span className="icon is-left">
+              <i className="fas fa-search" aria-hidden="true" />
+            </span>
 
-        <a
-          data-cy="Category"
-          className="button mr-2 my-1"
-          href="#/"
-        >
-          Category 2
-        </a>
+            <span className="icon is-right">
+              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+              <button
+                data-cy="ClearButton"
+                type="button"
+                className="delete"
+              />
+            </span>
+          </p>
+        </div>
 
-        <a
-          data-cy="Category"
-          className="button mr-2 my-1 is-info"
-          href="#/"
-        >
-          Category 3
-        </a>
-        <a
-          data-cy="Category"
-          className="button mr-2 my-1"
-          href="#/"
-        >
-          Category 4
-        </a>
-      </div>
+        <div className="panel-block is-flex-wrap-wrap">
+          <a
+            href="#/"
+            data-cy="AllCategories"
+            className="button is-success mr-6 is-outlined"
+          >
+            All
+          </a>
 
-      <div className="panel-block">
-        <a
-          data-cy="ResetAllButton"
-          href="#/"
-          className="button is-link is-outlined is-fullwidth"
+          <a
+            data-cy="Category"
+            className="button mr-2 my-1 is-info"
+            href="#/"
+          >
+            Category 1
+          </a>
 
-        >
-          Reset all filters
-        </a>
-      </div>
-    </nav>
-  </div>
-);
+          <a
+            data-cy="Category"
+            className="button mr-2 my-1"
+            href="#/"
+          >
+            Category 2
+          </a>
+
+          <a
+            data-cy="Category"
+            className="button mr-2 my-1 is-info"
+            href="#/"
+          >
+            Category 3
+          </a>
+          <a
+            data-cy="Category"
+            className="button mr-2 my-1"
+            href="#/"
+          >
+            Category 4
+          </a>
+        </div>
+
+        <div className="panel-block">
+          <a
+            data-cy="ResetAllButton"
+            href="#/"
+            className="button is-link is-outlined is-fullwidth"
+
+          >
+            Reset all filters
+          </a>
+        </div>
+      </nav>
+    </div>
+  );
+};
