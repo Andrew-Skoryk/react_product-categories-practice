@@ -19,6 +19,11 @@ export const ProductsFilter: FC<Props> = ({
     handleUserFilter(id);
   };
 
+  const handleRessetAll = () => {
+    setQuery('');
+    setSelectedUser(0);
+  };
+
   const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
 
@@ -137,6 +142,7 @@ export const ProductsFilter: FC<Props> = ({
             data-cy="ResetAllButton"
             href="#/"
             className="button is-link is-outlined is-fullwidth"
+            onClick={handleRessetAll}
 
           >
             Reset all filters
