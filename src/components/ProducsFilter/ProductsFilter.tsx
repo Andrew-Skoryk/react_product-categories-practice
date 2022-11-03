@@ -1,17 +1,33 @@
-import { FC, useState } from 'react';
+import { FC, useState, ChangeEvent } from 'react';
 import cn from 'classnames';
 import usersFromServer from '../../api/users';
 
 type Props = {
   handleUserFilter: (userId: number) => void;
+  handleQueryFilter: (query: string) => void
 };
 
-export const ProductsFilter: FC<Props> = ({ handleUserFilter }) => {
+export const ProductsFilter: FC<Props> = ({
+  handleUserFilter,
+  handleQueryFilter,
+}) => {
   const [selectedUser, setSelectedUser] = useState(0);
+  const [query, setQuery] = useState('');
 
   const handleSelection = (id: number) => {
     setSelectedUser(id);
     handleUserFilter(id);
+  };
+
+  const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+
+    setQuery(value);
+    handleQueryFilter(value);
+  };
+
+  const ressetQuery = () => {
+    setQuery('');
   };
 
   return (
@@ -52,22 +68,26 @@ export const ProductsFilter: FC<Props> = ({ handleUserFilter }) => {
               data-cy="SearchField"
               type="text"
               className="input"
-              placeholder="Search"
-              value="qwe"
+              placeholder="Search..."
+              value={query}
+              onChange={handleInput}
             />
 
             <span className="icon is-left">
               <i className="fas fa-search" aria-hidden="true" />
             </span>
 
-            <span className="icon is-right">
-              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-              <button
-                data-cy="ClearButton"
-                type="button"
-                className="delete"
-              />
-            </span>
+            {query && (
+              <span className="icon is-right">
+                {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+                <button
+                  data-cy="ClearButton"
+                  type="button"
+                  className="delete"
+                  onClick={ressetQuery}
+                />
+              </span>
+            )}
           </p>
         </div>
 

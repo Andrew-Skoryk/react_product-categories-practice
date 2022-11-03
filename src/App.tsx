@@ -35,6 +35,15 @@ export const App: FC = () => {
     setProducts(filterByUser(userId));
   };
 
+  const handleQueryFilter = (query: string) => {
+    setProducts(productsFromServer.filter(({ name }) => {
+      const normalizedQuery = query.toLowerCase();
+      const normalizedName = name.toLowerCase();
+
+      return normalizedName.includes(normalizedQuery);
+    }));
+  };
+
   return (
     <div className="section">
       <div className="container">
@@ -42,6 +51,7 @@ export const App: FC = () => {
 
         <ProductsFilter
           handleUserFilter={handleUserFilter}
+          handleQueryFilter={handleQueryFilter}
         />
 
         <div className="box table-container">
